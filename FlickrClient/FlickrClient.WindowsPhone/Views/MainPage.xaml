@@ -1,0 +1,60 @@
+﻿<Page
+    x:Class="FlickrClient.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FlickrClient.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:caliburn="using:Caliburn.Micro"
+    xmlns:controls="using:FlickrClient.Controls"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <DataTemplate x:Key="PhotoItemTemplate">
+            <Grid Width="150" Margin="20,0,0,20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Image Source="{Binding UrlSmall}" Stretch="None" />
+                <TextBlock Grid.Row="1" 
+                           Text="{Binding Title}" 
+                           TextTrimming="CharacterEllipsis"/>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="SearchTextBox" 
+                 Visibility="{Binding IsSearch, Converter={StaticResource BoolToVisibilityConverter}, Mode=TwoWay}"
+                 Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Margin="20,10,20,0"/>
+        <controls:GridViewWithAutoLoading Grid.Row="1"
+                                          Margin="0,20,0,0"
+                                          ItemsSource="{Binding Photos}"
+                                          IsLoadingMoreItems ="{Binding IsInProgress}"
+                                          ItemTemplate="{StaticResource PhotoItemTemplate}"
+                                          SelectionMode="None"
+                                          IsItemClickEnabled="True"
+                                          caliburn:Message.Attach="[Event ItemClick] = [Action NavigateToPhoto($clickeditem)]; [Event LoadMore] = [Action LoadMorePhotos()]"
+                                          HorizontalAlignment="Stretch"
+                                          HorizontalContentAlignment="Stretch">
+            <controls:GridViewWithAutoLoading.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="2"/>
+                </ItemsPanelTemplate>
+            </controls:GridViewWithAutoLoading.ItemsPanel>
+        </controls:GridViewWithAutoLoading>
+    </Grid>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Icon="Find" Label="search"
+                              Click="AppBarButton_Click"/>
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>

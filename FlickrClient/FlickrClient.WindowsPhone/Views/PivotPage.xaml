@@ -1,0 +1,41 @@
+﻿<Page
+    x:Class="FlickrClient.Views.PivotPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FlickrClient.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+     xmlns:caliburn="using:Caliburn.Micro"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <DataTemplate x:Key="PhotoItemTemplate">
+            <Image Grid.Row="1"
+                       Source="{Binding UrlBig}"
+                       Stretch="None"/>       
+        </DataTemplate>
+        <DataTemplate x:Key="PhotoHeaderTemplate">
+            <TextBlock Text="{Binding Title}"
+                       Width="300"
+                       TextTrimming="Clip"/>
+        </DataTemplate>
+    </Page.Resources>
+    <Grid>
+        <Pivot ItemsSource="{Binding Photos}"
+               HeaderTemplate="{StaticResource PhotoHeaderTemplate}"
+               ItemTemplate="{StaticResource PhotoItemTemplate}"
+               SelectedItem="{Binding SelectedPhoto, Mode=TwoWay}" 
+                />
+
+
+    </Grid>
+    <Page.BottomAppBar>
+        <CommandBar>
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Icon="Map" Label="map"
+                              IsEnabled="{Binding IsLocationExist}"
+                              x:Name="NavigateToMap"/>
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>
